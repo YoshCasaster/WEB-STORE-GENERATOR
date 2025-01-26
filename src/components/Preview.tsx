@@ -118,7 +118,7 @@ const Preview = ({ style, section1, products, testimonials, footer, adPopup, soc
                 <div className="p-4">
                   <h3 className="text-xl font-bold mb-2">{product.title}</h3>
                   <p className="text-2xl font-bold text-green-600 mb-2">
-                    {product.price && `$${product.price}`}
+                    {product.price && `Rp${product.price}`}
                   </p>
                   <p className="text-gray-600 mb-4">{product.description}</p>
                   <button
