@@ -107,7 +107,7 @@ const HtmlCode = ({ style, section1, products, testimonials, footer, adPopup, so
                     ` : ''}
                     <div class="p-4">
                         <h3 class="text-xl font-bold mb-2">${product.title}</h3>
-                        <p class="text-2xl font-bold text-green-600 mb-2">$${product.price}</p>
+                        <p class="text-2xl font-bold text-green-600 mb-2">Rp${product.price}</p>
                         <p class="text-gray-600 mb-4">${product.description}</p>
                         <button onclick="window.open('https://wa.me/${product.whatsappNumber || '1234567890'}?text=${encodeURIComponent(`Saya ingin membeli ${product.title} berikut`)}', '_blank')" class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors">
                             Beli Sekarang
