@@ -43,6 +43,30 @@ const ProductCard = ({ product, onChange, onDelete }) => {
         </div>
 
         <div>
+          <label className="block text-sm font-medium text-gray-700">Discount (%)</label>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            value={product.discount || ''}
+            onChange={(e) => onChange({ ...product, discount: e.target.value ? Number(e.target.value) : '' })}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Product Type</label>
+          <select
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            value={product.type || 'normal'}
+            onChange={(e) => onChange({ ...product, type: e.target.value })}
+          >
+            <option value="normal">Normal</option>
+            <option value="bestseller">Best Seller</option>
+          </select>
+        </div>
+
+        <div>
           <label className="block text-sm font-medium text-gray-700">WhatsApp Number</label>
           <input
             type="text"

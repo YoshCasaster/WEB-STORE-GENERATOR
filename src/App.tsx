@@ -174,7 +174,7 @@ function App() {
             </div>
           </div>
 
-          {/* YOSH */}
+          {/* Preview Panel */}
           <div className="w-full lg:w-1/3">
             <div className="lg:sticky lg:top-8 space-y-4">
               <div className="flex gap-2">
@@ -227,7 +227,7 @@ function App() {
         </div>
       </div>
 
-      {/* YOSH */}
+      {/* Main Footer */}
       <footer className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-6 px-4 mt-8">
         <div className="container mx-auto text-center">
           <a

@@ -35,7 +35,15 @@ const Preview = ({ style, section1, products, testimonials, footer, adPopup, soc
     return icons[platform];
   };
 
-  const backgroundStyle = style.backgroundImage
+  const backgroundStyle = style.gradient
+    ? { background: style.gradient }
+    : style.pattern
+    ? { 
+        backgroundColor: style.backgroundColor || '#5865F2',
+        backgroundImage: style.pattern,
+        backgroundRepeat: 'repeat'
+      }
+    : style.backgroundImage
     ? {
         backgroundImage: `url(${style.backgroundImage})`,
         backgroundSize: 'cover',
@@ -44,9 +52,36 @@ const Preview = ({ style, section1, products, testimonials, footer, adPopup, soc
       }
     : { backgroundColor: style.backgroundColor };
 
+  const calculateDiscountedPrice = (price, discount) => {
+    if (!discount) return price;
+    const discountAmount = (price * discount) / 100;
+    return (price - discountAmount).toFixed(2);
+  };
+
   return (
     <div className="border rounded-lg overflow-hidden bg-white">
-      <div style={backgroundStyle} className="min-h-screen relative">
+      <div style={backgroundStyle} className={`min-h-screen relative ${style.particles ? 'particles-bg' : ''}`}>
+        {style.particles && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="particles">
+              {[...Array(50)].map((_, i) => (
+                <div
+                  key={i}
+                  className="particle"
+                  style={{
+                    '--x': `${Math.random() * 100}%`,
+                    '--y': `${Math.random() * 100}%`,
+                    '--duration': `${10 + Math.random() * 20}s`,
+                    '--delay': `${-Math.random() * 20}s`,
+                    '--size': `${2 + Math.random() * 3}px`,
+                    '--opacity': Math.random() * 0.5 + 0.2
+                  } as React.CSSProperties}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Ad Popup */}
         {showAd && adPopup.imageUrl && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -111,15 +146,44 @@ const Preview = ({ style, section1, products, testimonials, footer, adPopup, soc
           <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">PRODUK</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {products.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                {product.image && (
-                  <img src={product.image} alt={product.title} className="w-full h-48 object-cover" />
+              <div 
+                key={product.id} 
+                className={`relative bg-white rounded-lg shadow-lg overflow-hidden ${
+                  product.type === 'bestseller' ? 'border-2 border-yellow-400 transform hover:scale-105 transition-transform' : ''
+                }`}
+              >
+                {product.type === 'bestseller' && (
+                  <div className="absolute top-4 right-4 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full font-semibold text-sm z-10">
+                    Best Seller
+                  </div>
                 )}
-                <div className="p-4">
+                {product.discount > 0 && (
+                  <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full font-semibold text-sm z-10">
+                    -{product.discount}%
+                  </div>
+                )}
+                {product.image && (
+                  <div className="relative">
+                    <img src={product.image} alt={product.title} className="w-full h-48 object-cover" />
+                    {product.type === 'bestseller' && (
+                      <div className="absolute inset-0 bg-yellow-400 opacity-10"></div>
+                    )}
+                  </div>
+                )}
+                <div className={`p-4 ${product.type === 'bestseller' ? 'bg-gradient-to-br from-white to-yellow-50' : ''}`}>
                   <h3 className="text-xl font-bold mb-2">{product.title}</h3>
-                  <p className="text-2xl font-bold text-green-600 mb-2">
-                    {product.price && `Rp${product.price}`}
-                  </p>
+                  <div className="mb-2">
+                    {product.discount > 0 ? (
+                      <div className="space-y-1">
+                        <p className="text-sm text-gray-500 line-through">${product.price}</p>
+                        <p className="text-2xl font-bold text-red-600">
+                          Rp {calculateDiscountedPrice(product.price, product.discount)}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-2xl font-bold text-green-600">${product.price}</p>
+                    )}
+                  </div>
                   <p className="text-gray-600 mb-4">{product.description}</p>
                   <button
                     onClick={() => {
@@ -127,7 +191,11 @@ const Preview = ({ style, section1, products, testimonials, footer, adPopup, soc
                       const number = product.whatsappNumber || '1234567890';
                       window.open(`https://wa.me/${number}?text=${text}`, '_blank');
                     }}
-                    className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors"
+                    className={`w-full py-2 rounded-md text-white transition-colors ${
+                      product.type === 'bestseller'
+                        ? 'bg-yellow-500 hover:bg-yellow-600'
+                        : 'bg-green-500 hover:bg-green-600'
+                    }`}
                   >
                     Beli Sekarang
                   </button>

@@ -5,6 +5,12 @@ const HtmlCode = ({ style, section1, products, testimonials, footer, adPopup, so
   const [copied, setCopied] = React.useState(false);
   const codeRef = useRef(null);
 
+  const calculateDiscountedPrice = (price, discount) => {
+    if (!discount) return price;
+    const discountAmount = (price * discount) / 100;
+    return (price - discountAmount).toFixed(2);
+  };
+
   const generateHtml = () => {
     const getSocialIcon = (platform) => {
       const icons = {
@@ -101,15 +107,48 @@ const HtmlCode = ({ style, section1, products, testimonials, footer, adPopup, so
             <h2 class="text-2xl sm:text-3xl font-bold text-white text-center mb-8">PRODUK</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
                 ${products.map(product => `
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                    ${product.image ? `
-                    <img src="${product.image}" alt="${product.title}" class="w-full h-48 object-cover">
+                <div class="relative bg-white rounded-lg shadow-lg overflow-hidden ${
+                  product.type === 'bestseller' ? 'border-2 border-yellow-400 transform hover:scale-105 transition-transform' : ''
+                }">
+                    ${product.type === 'bestseller' ? `
+                    <div class="absolute top-4 right-4 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full font-semibold text-sm z-10">
+                        Best Seller
+                    </div>
                     ` : ''}
-                    <div class="p-4">
+                    ${product.discount > 0 ? `
+                    <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full font-semibold text-sm z-10">
+                        -${product.discount}%
+                    </div>
+                    ` : ''}
+                    ${product.image ? `
+                    <div class="relative">
+                        <img src="${product.image}" alt="${product.title}" class="w-full h-48 object-cover">
+                        ${product.type === 'bestseller' ? `
+                        <div class="absolute inset-0 bg-yellow-400 opacity-10"></div>
+                        ` : ''}
+                    </div>
+                    ` : ''}
+                    <div class="${product.type === 'bestseller' ? 'p-4 bg-gradient-to-br from-white to-yellow-50' : 'p-4'}">
                         <h3 class="text-xl font-bold mb-2">${product.title}</h3>
-                        <p class="text-2xl font-bold text-green-600 mb-2">Rp${product.price}</p>
+                        <div class="mb-2">
+                            ${product.discount > 0 ? `
+                            <div class="space-y-1">
+                                <p class="text-sm text-gray-500 line-through">Rp${product.price}</p>
+                                <p class="text-2xl font-bold text-red-600">
+                                    $${calculateDiscountedPrice(product.price, product.discount)}
+                                </p>
+                            </div>
+                            ` : `
+                            <p class="text-2xl font-bold text-green-600">$${product.price}</p>
+                            `}
+                        </div>
                         <p class="text-gray-600 mb-4">${product.description}</p>
-                        <button onclick="window.open('https://wa.me/${product.whatsappNumber || '1234567890'}?text=${encodeURIComponent(`Saya ingin membeli ${product.title} berikut`)}', '_blank')" class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors">
+                        <button onclick="window.open('https://wa.me/${product.whatsappNumber || '1234567890'}?text=${encodeURIComponent(`Saya ingin membeli ${product.title} berikut`)}', '_blank')" 
+                            class="w-full py-2 rounded-md text-white transition-colors ${
+                              product.type === 'bestseller'
+                                ? 'bg-yellow-500 hover:bg-yellow-600'
+                                : 'bg-green-500 hover:bg-green-600'
+                            }">
                             Beli Sekarang
                         </button>
                     </div>
