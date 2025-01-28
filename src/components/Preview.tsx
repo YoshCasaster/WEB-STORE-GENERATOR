@@ -175,13 +175,13 @@ const Preview = ({ style, section1, products, testimonials, footer, adPopup, soc
                   <div className="mb-2">
                     {product.discount > 0 ? (
                       <div className="space-y-1">
-                        <p className="text-sm text-gray-500 line-through">Rp${product.price}</p>
+                        <p className="text-sm text-gray-500 line-through">${product.price}</p>
                         <p className="text-2xl font-bold text-red-600">
-                          Rp{calculateDiscountedPrice(product.price, product.discount)}
+                          ${calculateDiscountedPrice(product.price, product.discount)}
                         </p>
                       </div>
                     ) : (
-                      <p className="text-2xl font-bold text-green-600">${product.price}</p>
+                      <p className="text-2xl font-bold text-green-600">Rp{product.price}</p>
                     )}
                   </div>
                   <p className="text-gray-600 mb-4">{product.description}</p>
