@@ -177,7 +177,7 @@ const Preview = ({ style, section1, products, testimonials, footer, adPopup, soc
                       <div className="space-y-1">
                         <p className="text-sm text-gray-500 line-through">${product.price}</p>
                         <p className="text-2xl font-bold text-red-600">
-                          Rp {calculateDiscountedPrice(product.price, product.discount)}
+                          Rp{calculateDiscountedPrice(product.price, product.discount)}
                         </p>
                       </div>
                     ) : (
