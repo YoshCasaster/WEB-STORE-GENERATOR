@@ -135,7 +135,7 @@ const HtmlCode = ({ style, section1, products, testimonials, footer, adPopup, so
                             <div class="space-y-1">
                                 <p class="text-sm text-gray-500 line-through">Rp${product.price}</p>
                                 <p class="text-2xl font-bold text-red-600">
-                                    $${calculateDiscountedPrice(product.price, product.discount)}
+                                    Rp${calculateDiscountedPrice(product.price, product.discount)}
                                 </p>
                             </div>
                             ` : `
